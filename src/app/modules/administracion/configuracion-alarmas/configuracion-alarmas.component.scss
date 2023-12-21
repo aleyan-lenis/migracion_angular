@@ -1,0 +1,86 @@
+@import '../../../../assets/sass/clases.scss';
+@import '../../../../assets/sass/variables.scss';
+@import '../../../../assets/sass/predef.scss';
+
+
+.contenedor-tipo-alertas{
+	height: 500px;
+	padding-right: 10px;
+	overflow-y: scroll;
+	box-sizing: border-box;
+	overflow-x: hidden;
+	@extend %custom-scroll-bar;
+}
+
+.tipo-alerta{
+	display: flex;
+	border-bottom: 1px solid rgba($color: #cccccc, $alpha: .3);
+	padding: 15px 5px 0 5px;
+	cursor: pointer;
+	background: #ffffff;
+}
+
+.tipo-alerta:hover{
+	background: #f7f7f7
+}
+
+.tipo-alerta .color-prioridad{
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	margin: 5px;
+}
+
+.tipo-alerta > div{
+	margin-left: 20px;
+}
+
+.tipo-alerta .tipo{
+	font-size: 1.1rem;
+}
+
+.tipo-alerta > div .observacion{
+	color: #4d4d4d;
+	font-size: .9rem;
+}
+
+.tipo-alerta > div .estado{
+	font-style: italic;
+	padding-left: 5px;
+	font-size: .9rem;
+}
+
+.btn-nueva-alerta{
+	cursor: pointer;
+	text-decoration: underline;
+	font-weight: 500;
+	color: $color-primario;
+}
+
+.btn-nueva-alerta:focus{
+	outline: none;
+}
+
+.cdk-drag-preview {
+	box-sizing: border-box;
+	border-radius: 4px;
+	box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+					0 8px 10px 1px rgba(0, 0, 0, 0.14),
+					0 3px 14px 2px rgba(0, 0, 0, 0.12);
+ }
+ 
+ .cdk-drag-placeholder {
+	opacity: 0;
+ }
+ 
+ .cdk-drag-animating {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+ }
+ 
+ .example-box:last-child {
+	border: none;
+ }
+ 
+ .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+	transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+ }

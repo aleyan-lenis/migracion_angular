@@ -1,0 +1,161 @@
+<div class="row mt-2 px-2">
+	<div class="col-12">
+		<div style="display: flex; justify-content: space-between; align-items: center">
+			<p style="font-size: 1.3rem; font-weight: 500">Reporte de Alarmas</p>
+			<div>
+				<span *ngIf="listaAlarmas.length != 0" class="btn btn-light btn-generar-reporte"
+					(click)="onGenerarReporte()">Generar Reporte</span>
+
+				<span class="btn-filtro" (click)="onShowFilters()">
+					<span class="icon-filter"></span> Filtrar
+				</span>
+			</div>
+		</div>
+
+		<div class="filtros" [@showFilter]="showFilter ? 'show' : 'hide'">
+			<div>
+				<label for="">Fecha Inicio</label>
+				<input type="date" (change)="onFilter($event, 'fechaInicio')">
+			</div>
+			<div>
+				<label for="">Fecha Fin</label>
+				<input type="date" (change)="onFilter($event, 'fechaFin')">
+			</div>
+			<div style="position: relative">
+				<label for="">Estado</label>
+				<select name="" id="" (change)="onFilter($event, 'estado')">
+					<option value="">Todos</option>
+					<option value="A">Activo</option>
+					<option value="I">Inactivo</option>
+				</select>
+				<span class="icon-keyboard_arrow_down" style="margin-left: -20px;margin-top: 5px"></span>
+			</div>
+		</div>
+
+		<div class="mt-2">
+			<small>Mostrando {{ nroAlarmasCargadas }} resultados de {{ totalAlarmas }}</small>
+		</div>
+
+		<div class="contenedor-alarmas mt-2">
+			<div *ngFor="let alarma of listaAlarmas; let i = index">
+				<div class="alarma" (click)="showDetail(i)">
+					<span class="identifier" [ngClass]="{'identifier-active': states[i] == 'show'}"></span>
+					<div style="display: flex; align-items: center">
+						<span style="font-size: .85rem"> {{ alarma.idAlarma }} </span>
+						<span style="margin-left: 10px;width: 15px; height: 15px; display: inline-block"
+							[ngStyle]="{'background': alarma.color}"></span>
+						<div style="margin-left: 10px; max-width: 600px;">
+							<span class="alarma__nombre">
+								{{ alarma.nombre | uppercase}}
+								<img [src]="'assets/img/file_2.png'" *ngIf="alarma.archivo == 'SI'"
+									style="width: 10px;margin-left: 10px">
+							</span>
+							<p style="font-size: .9rem; margin-bottom: 0"> {{ alarma.detalle }} </p>
+						</div>
+					</div>
+					<div>
+						<div class="alarma__fechas">
+							<small style="display: flex; flex-direction: column; align-items: flex-end">
+								<span>Finaliza</span>
+								<p class="alarma__fecha text-muted"> {{ alarma.fechaFin | date | fechaIndefinida}} </p>
+							</small>
+						</div>
+					</div>
+				</div>
+
+				<div class="informacion-adicional" [@showDetail]="states[i]">
+					<div class="row" style="padding: 15px 30px">
+						<div class="col-auto" style="display: table;font-size: .9rem;width: auto">
+							<span class="column-detail">
+								<span>Tipo alarma: </span>
+								<span>{{ alarma.tipoAlarma }}</span>
+							</span>
+
+							<span class="column-detail">
+								<span>Prioridad: </span>
+								<span>{{ alarma.prioridad }}</span>
+							</span>
+
+							<span class="column-detail">
+								<span>Archivo: </span>
+								<span>{{ alarma.archivo | titlecase}} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Fecha Creacion: </span>
+								<span>{{ alarma.fechaRegistro | date}} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Fecha Inicio: </span>
+								<span>{{ alarma.fechaInicio | date }} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Fecha Fin: </span>
+								<span>{{ alarma.fechaFin | date | fechaIndefinida}}</span>
+							</span>
+
+							<span class="column-detail">
+								<span>Area Solicitante </span>
+								<span>{{ alarma.areaSolicitante | titlecase}}</span>
+							</span>
+						</div>
+						<div class="col-auto" style="display: table;font-size: .9rem; width: auto;margin-left: 100px">
+							<span class="column-detail">
+								<span>Estado: </span>
+								<span> {{ alarma.estado | estadoCompleto}} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Solicitante: </span>
+								<span>{{ alarma.usuarioSolicitante | cutPrefix | titlecase}} </span>
+							</span>
+
+							<span class="column-detail" *ngIf="alarma.usuarioSIS">
+								<span>Usuario SIS: </span>
+								<span> {{ alarma.usuarioSIS | titlecase}} </span>
+							</span>
+
+							<span class="column-detail" *ngIf="alarma.fechaAprobSIS">
+								<span>Fecha aprob. SIS: </span>
+								<span> {{ alarma.fechaAprobSIS | date}} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Usuario SAC: </span>
+								<span> {{ alarma.usuarioSAC | titlecase}} </span>
+							</span>
+
+							<span class="column-detail">
+								<span>Fecha aprob. SAC: </span>
+								<span>{{ alarma.fechaAprobSAC | date}} </span>
+							</span>
+						</div>
+
+						<div class="col-auto" style="display: table;font-size: .9rem; width: auto;">
+							<span class="column-detail" *ngIf="alarma.archivo == 'SI' && alarma.hasError != 0">
+								<span style="text-decoration: underline;cursor: pointer"
+									(click)="onDescargarReporteErrores(alarma.idAlarma)">Reporte de errores </span>
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="row justify-content-center pb-4" *ngIf="totalAlarmas > 6">
+			<div class="col-auto contenedor-paginacion">
+				<button (click)="mostrarMenos()" [disabled]="(nroAlarmasCargadas - 6) == 0">Anterior</button>
+				<button (click)="mostrarMas()" [disabled]="(totalAlarmas - nroAlarmasCargadas) == 0">Siguiente</button>
+			</div>
+		</div>
+
+		<app-loader *ngIf="isLoadingAlarmas"></app-loader>
+
+		<ng-template [ngIf]="!isLoadingAlarmas && listaAlarmas.length == 0">
+			<app-no-content [contenido]="'alarmas que cumplan estos parametros'">
+			</app-no-content>
+		</ng-template>
+	</div>
+</div>

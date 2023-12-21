@@ -1,0 +1,33 @@
+.input-with-underline{
+	border: none;
+	border-bottom: 1px solid #c0bfbf;
+	padding-bottom: 5px;
+	font-size: .9rem;
+	background: transparent;
+}
+
+.input-with-underline:focus{
+	border: none;
+	outline: none;
+	border-bottom: 2px solid #FD000D;
+}
+
+.containers-user{
+	list-style: none;
+	overflow-y: scroll;
+	max-height: 300px;
+	width: 100%;
+	padding: 0 !important;
+
+}
+
+.containers-user li{
+	padding: 8px 20px;
+	border-bottom: 1px solid rgba(0,0,0,.12);
+	cursor: pointer;
+	color: rgb(75, 75, 75);
+}
+
+.containers-user li:hover{
+	background: rgb(223, 223, 223);
+}

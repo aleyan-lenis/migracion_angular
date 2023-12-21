@@ -1,0 +1,39 @@
+<div class="row justify-content-between" style="align-content: center" style="position: relative; ">
+	<div class="col-auto" style="display: flex; align-items: center;">
+		<img [src]="'assets/img/menu.png'" class="toggle-button" appToggleMenu>
+		<span class="titulo-pagina"> Administrador de Alarmas Masivas</span>
+	</div>
+
+	<div class="logo" style="position: relative; margin: 10px 12px 0 0 ">
+		<div class="wrapper-logo">
+			<img [src]="'assets/img/claro_2.png'" alt="">
+		</div>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-12">
+		<div class="row">
+			<aside class="col-2 " style="position: relative; border-right: 1px solid #e7e7e7">
+				<div style="overflow: hidden">
+					<div class="nav flex-column nav-pills menu" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+						<a class="nav-link" *ngFor="let modulo of modulosUsuario" [routerLink]="modulo.path | lowercase"
+							routerLinkActive="active">{{ modulo.nombre }}</a>
+					</div>
+
+					<div class="mt-5 mx-2">
+						
+						<p> <small> {{ nombreUsuario | titlecase}} - <span class="text-muted" style="font-weight: 600;font-size: .8rem">{{ rolUsuario }}</span> </small></p>
+						<a (click)="onLogout()" style="cursor: pointer" class="link-secundario">Cerrar sesión</a>
+					</div>
+				</div>
+			</aside>
+
+			<div class="col-10 py-2">
+				<router-outlet></router-outlet>
+			</div>
+		</div>
+	</div>
+</div>
+
+<app-alert-message></app-alert-message>

@@ -1,0 +1,148 @@
+import { environment } from 'src/environments/environment';
+
+const URL = environment.API_URL;
+export const URL_JEIS_REST = environment.URL_JEIS;
+
+/* =================== AUTH_WS ================*/
+/**
+ * Se envia un objeto usuario y se recibe un objeto respuesta.
+ * La propiedad objeto de respuesta tiene el token que sera
+ * guardado en el sesion storage.
+ */
+export const LOGIN = URL + 'auth/login';
+
+/**
+ * Se envia el token guardado en el sesion storage
+ */
+export const LOGOUT = URL + 'auth/logout';
+
+/**
+ * Obtiene los usuarios que tiene permiso para el sistema
+ */
+
+ /** GET */
+export const USUARIOS_PERMITIDOS = URL + 'auth/usuarios';
+export const BUSCAR_USUARIOS_OPE = URL + 'auth/usuarios/operaciones/';
+export const OBTENER_AREAS_CLARO = URL + 'auth/usuarios/areas';
+export const OBTENER_INFORMACION_IAM = URL + 'auth/usuarios/iam/';
+
+/** POST */
+export const CREAR_USUARIO = URL + 'auth/usuario';
+
+/** POST */
+export const CAMBIAR_ESTADO_USUARIO = URL + 'auth/usuario/estado';
+
+/** PUT */
+export const MODIFICAR_PERMISOS_USUARIO = URL + 'auth/usuario';
+
+
+ /* =================== ALARMAS_WS ================*/
+/**
+ * Si se envia el estado (A o I) y el idTipoAlarma 0, la respuesta van a ser
+ * todas las alarmas con ese estado. Si el idTipoAlarma es diferente de cero
+ * se buscara solo ese tipo de alarma
+ */
+
+export const GET_TIPOS_ALARMAS = URL + 'alarmas/get-tipos-alarmas';
+
+/**
+ * Si se envia el estado (A o I) y el idAlarma 0, la respuesta van a ser
+ * todas las alarmas con ese estado. Si el idAlarma es diferente de cero
+ * se buscara solo esa alarma. Si se envia SI como archivo traera solo alarmas
+ * configuradas por archivo
+ */
+export const GET_ALARMAS = URL + 'alarmas/get-alarmas';
+
+export const GET_ALARMAS_USUARIO = URL + 'alarmas/get-alarmas-usuario';
+
+/**
+ * Se envia un objeto TipoAlarma con color, tipo, observacion, prioridad, estado,
+ * y usuarioRegistro
+ */
+export const REGISTRAR_TIPO_ALARMA = URL + 'alarmas/registrar-tipo-alarma';
+
+/**
+ * Se envia un objeto TipoAlarma con todos sus datos
+ */
+export const ACTUALIZAR_TIPO_ALARMA = URL + 'alarmas/actualizar-tipo-alarma';
+
+export const SOLICITAR_NUEVA_ALARMA = URL + 'alarmas/solicitar-nueva-alarma';
+
+export const CAMBIAR_ESTADO_ALARMA = URL + 'alarmas/cambiar-estado-alarma';
+
+export const ACTUALIZAR_PRIORIDAD_TIPO = URL + 'alarmas/actualizar-prioridad';
+
+export const MODIFICAR_ALARMA = URL + 'alarmas/modificar-alarma';
+
+export const REGISTRAR_INFO_CARGA_ARCHIVO = URL + 'alarmas/registrar-datos-carga-archivo';
+
+export const OBTENER_DATOS_ARCHIVO = URL + 'alarmas/obtener-datos-archivo';
+
+export const ELIMINAR_SUBSCRIPCIONES = URL + 'alarmas/eliminar-subscripciones';
+
+export const ELIMINAR_SUBSCRIPCIONES_CONDICION = URL + 'alarmas/eliminar-subscripciones-condicion';
+
+export const REPORTE_ALARMAS = URL + 'alarmas/reporte';
+
+export const CONSULTAR_DTOS_TECNICOS = URL + 'alarmas/dato_tecnico';
+
+export const CONVERTIR_ARCHIVO_BASE64 = URL + 'alarmas/convertir-archivo'
+
+
+/* =================== SUBSCRIPCION_WS ================*/
+
+/**
+ * Se envia un objeto JSON con idWorflow, listaSubscripciones y idAlarma
+ */
+export const SUBIR_SUBSCRIPCIONES = URL + 'subscripcion/subir-subscripciones';
+
+export const SUBIR_SUBSCRIPCIONES_CONDICION = URL + 'subscripcion/subir-subscripciones-condiciones';
+
+export const OBTENER_SUBSCRIPCIONES = URL + 'subscripcion/obtener-subcripciones';
+
+
+/* =================== WORKFLOW_WS ================*/
+
+export const CREAR_WORKFLOW = URL + 'workflow/crear-workflow';
+
+export const OBTENER_OBSERVACIONES = URL + 'workflow/obtener-observaciones-alarma';
+
+export const OBTENER_INFO_APROB = URL + 'workflow/obtener-informacion-aprobacion';
+
+export const OBTENER_INFO_CANCELACION = URL + 'workflow/obtener-informacion-cancelacion';
+
+export const OBTENER_FLUJO_ALARMA = URL + 'workflow/flujo-solicitud';
+
+export const OBTENER_HIST_MODIFICACION = URL + 'workflow/hist-modificacion';
+
+export const OBTENER_COMENTARIOS = URL + 'workflow/comentarios';
+
+export const OBTENER_NRO_ALARMAS = URL + 'workflow/nro-alarmas-aprobadas';
+
+/* =================== PARAMETRO_WS ================*/
+
+export const OBTENER_PARAMETRO = URL + 'parametro/';
+
+/* =================== CONFIGURACION_WS ================*/
+/** POST */
+export const OBTENER_CONFIGURACION = URL + 'config/obtener-configuracion';
+
+/** POST */
+export const CREAR_CONFIGURACION = URL + 'config/crear-configuracion';
+
+/** PUT */
+export const MODIFICAR_NOMBRE_CONFIGURACION = URL + 'config/cambiar-nombre';
+
+/** PUT */
+export const MODIFICAR_ESTADO_CONFIGURACION = URL + 'config/cambiar-estado';
+
+/* =================== ALARMA_SGA_WS ================*/
+/** POST */
+export const CREAR_ALARMA = URL + 'config/crear-alarma';
+export const CREAR_ALARMA_DT = URL + 'config/crear-alarmaDT';
+export const MODIFICAR_ALARMA_SGA = URL + 'config/modificar-alarma';
+
+/** GET */
+export const OBTENER_ALARMAS = URL + 'config/obtener-alarmas';
+export const OBTENER_ALARMAS_REPORTE = URL + 'config/obtener-alarmas-reporte';
+

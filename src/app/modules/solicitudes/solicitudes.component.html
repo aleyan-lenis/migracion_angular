@@ -1,0 +1,23 @@
+<div class="row">
+	<div class="col-12 adm-alertas">
+		<ngb-tabset>
+			<ng-template [ngIf]="isUserSol">
+				<ngb-tab>
+					<ng-template ngbTabTitle><span class="option-tab">Nueva alarma</span></ng-template>
+					<ng-template ngbTabContent>
+						<app-solicitar-alerta></app-solicitar-alerta>
+					</ng-template>
+				</ngb-tab>
+			</ng-template>
+
+			<ng-template [ngIf]="!isUserAdm">
+				<ngb-tab>
+					<ng-template ngbTabTitle><span class="option-tab">Mis solicitudes</span></ng-template>
+					<ng-template ngbTabContent>
+						<app-mis-solicitudes></app-mis-solicitudes>
+					</ng-template>
+				</ngb-tab>
+			</ng-template>
+		</ngb-tabset>
+	</div>
+</div>

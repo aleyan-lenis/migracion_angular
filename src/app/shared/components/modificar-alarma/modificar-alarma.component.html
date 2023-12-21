@@ -1,0 +1,466 @@
+<div class="row mt-3 mx-2">
+	<div class="col-12">
+		<div class="row mt-2">
+			<form class="col-12 d-flex justify-content-between" [formGroup]="formulario">
+				<div class="col-8">
+					<div style="display: flex; align-items:  center">
+						<span style="width: 15px; height: 15px; display: inline-block"
+							[ngStyle]="{'background': tipoAlarma.color}"></span>
+						<div style="margin-left: 10px; max-width: 600px;">
+							<span class="" *ngIf="!onEditAdm"> {{ tipoAlarma.tipo | uppercase}} </span>
+
+							<div style="position: relative;display: flex;" *ngIf="onEditAdm">
+								<select name="tipoAlarma" id="" class="select-tipo-alarma"
+									style="border: none;padding: 5px 10px;font-size: .9rem;"
+									(change)="onChangeTipoAlarma($event)">
+									<option [value]="tipo.idTipoAlarma" *ngFor="let tipo of listaTiposAlarmas">
+										{{ tipo.tipo | uppercase }}
+									</option>
+								</select>
+								<span class="icon-keyboard_arrow_down"
+									style="margin-left: -15px;margin-top: 5px"></span>
+							</div>
+						</div>
+					</div>
+
+					<p class="mt-3 alarma__titulo">
+						<span *ngIf="!onEditSAC && !onEditAdm" [title]="alarma.nombre" style="word-wrap: break-word;">
+							{{ alarma.nombre | titlecase}} <small class="text-muted"
+								style="font-size: .9rem">({{ alarma.idAlarma }})</small>
+							<img [src]="'assets/img/file_2.png'"
+								*ngIf="alarma.archivo == 'SI'  || alarma.archivo == 'AMBOS'"
+								style="width: 10px;margin-left: 5px;margin-top: -10px">
+						</span>
+
+						<input type="text" class="form-control mt-1" placeholder="Nombre de alarma"
+							formControlName="nombre" *ngIf="onEditSAC || onEditAdm" maxlength="200">
+						<span class="alarma__info-archivo" *ngIf="alarma.archivo == 'SI' || alarma.archivo == 'AMBOS'">
+							Cantidad de registros: {{ datosArchivo?.cantExitosos}}
+						</span>
+					</p>
+
+					<p class="alarma__detalle">
+						<strong>Texto a mostrar al asesor</strong>
+						<br>
+						<span *ngIf="!onEditSAC && !onEditAdm">{{ alarma.detalle | capitalLetter}}</span>
+
+						<textarea type="text" class="form-control mt-1" placeholder="Detalle" formControlName="detalle"
+							multiple="true" *ngIf="onEditSAC || onEditAdm" maxlength="500"></textarea>
+					</p>
+
+					<div class="row mt-4" *ngIf="alarma.archivo == 'NO' || alarma.archivo == 'AMBOS'">
+						<div class="col-12">
+							<strong>Condiciones de alarma</strong>
+							<br>
+							<ul *ngIf="!onEditSIS">
+								<li *ngFor="let condicion of condicionesAlarma" style="font-size: .95rem">
+									{{ condicion }} </li>
+							</ul>
+
+							<textarea type="text" class="form-control mt-1" placeholder="Condiciones"
+								formControlName="condiciones" multiple="true" *ngIf="onEditSIS"></textarea>
+						</div>
+					</div>
+
+					<div class="row mt-4" *ngIf="alarma.features !== '' && alarma.features != null">
+						<div class="col-12">
+							<strong>Cod. Features Asociados</strong>
+							<br>
+							<span *ngIf="!onEditAdm">{{ alarma.features }}</span>
+							<input type="text" class="form-control form-control-sm mt-1"
+								placeholder="Codigos de Features Asociados" formControlName="features"
+								*ngIf="onEditAdm && isUserAdm" />
+						</div>
+					</div>
+
+					<div class="row mt-4" *ngIf="alarma.planes != '' && alarma.planes != null">
+						<div class="col-12">
+							<strong>Cod. Planes Asociados</strong>
+							<br>
+							<span *ngIf="!onEditAdm">{{ alarma.planes }}</span>
+
+							<input type="text" class="form-control form-control-sm mt-1"
+								placeholder="Codigos de Planes Asociados" formControlName="planes"
+								*ngIf="onEditAdm && isUserAdm" />
+						</div>
+					</div>
+
+					<div class="row mt-4 container-datos-tecnicos" *ngIf="(isUserSIS || (isUserAdm ))
+					    && (alarma.archivo == 'NO' || alarma.archivo == 'AMBOS')">
+						<app-dato-tecnico class="col-12" [formDatoTecnico]="formulario.controls['datosTecnicos']"
+							[datosTecnicos]="datosTecnicos" [estadoGeneral]="alarma.estado"
+							[estadoAlarma]="alarma.aprobacionSIS" [isDisabled]="isDisabled">
+						</app-dato-tecnico>
+					</div>
+
+					<div class="row mt-3">
+						<!-- ESTADOS DE LA SOLICITUD -->
+						<div class="col-12">
+							<div>
+								<strong>Estado</strong>
+
+								<div style="display:block" class="mt-2">
+									<ng-template [ngIf]="alarma.estado == 'P' || alarma.estado == 'R'">
+										<span *ngIf="alarma.aprobacionSAC == 'P'"
+											style="display: block; margin-bottom: 5px">
+											<img [src]="'assets/img/loading.png'" alt="" style="margin-right: 10px">
+											Pendiente de aprobacion por Customer Care <br>
+										</span>
+
+										<span *ngIf="alarma.aprobacionSAC == 'D'"
+											style="display: block; margin-bottom: 5px">
+											<img [src]="'assets/img/back.png'" alt="" style="margin-right: 10px">
+											Devuelto por Customer Care <br>
+										</span>
+
+										<span *ngIf="alarma.aprobacionSIS == 'P'"
+											style="display: block; margin-bottom: 5px">
+											<img [src]="'assets/img/loading.png'" alt="" style="margin-right: 10px">
+											Pendiente de aprobacion por Sistemas <br>
+										</span>
+
+										<span *ngIf="alarma.aprobacionSIS == 'D'"
+											style="display: block; margin-bottom: 5px">
+											<img [src]="'assets/img/back.png'" alt="" style="margin-right: 10px">
+											Devuelto por Sistemas <br>
+										</span>
+									</ng-template>
+
+									<ng-template
+										[ngIf]="alarma.estado == 'A' || alarma.estado == 'I' || alarma.estado == 'C'">
+										<span style="display: block">{{ alarma.estado | estadoCompleto }}</span>
+										<ng-template [ngIf]="alarma.estado != 'C'">
+											<strong class="mt-3" style="display: block">Aprobado por</strong>
+
+											<!-- MUESTRAS LOS NOMBRES DE LOS USUARIOS QUE APROBARON LA SOLICITUD -->
+											<div class="mt-2" style="display: table">
+												<span *ngFor="let dato of datosAprobacion"
+													style="font-size: .92rem; display: table-row">
+													<ng-template [ngIf]="dato.rol == 'SIS'" style="display: table-cell">
+														Sistemas:
+													</ng-template>
+													<ng-template [ngIf]="dato.rol == 'SAC'" style="display: table-cell">
+														Customer:
+													</ng-template>
+
+													<span
+														style="font-style: italic;display: table-cell; padding-left: 5px;	color: #616970;">
+														{{ dato.nombreUsuario | cutPrefix | titlecase}}
+														<small style="padding: 0 5px">-</small>
+														<small>
+															{{ dato.fechaAprobacionUsuario | date:'LLLL dd, y, H:mm' }}
+														</small>
+														<span class="icon-info" [matTooltip]="comentariosAprobacion"
+															[matTooltipPosition]="'above'"
+															[matTooltipClass]="'tooltipFont'" style="margin-right: 5px"
+															*ngIf="dato.rol == 'SIS'"></span>
+													</span>
+												</span>
+											</div>
+										</ng-template>
+									</ng-template>
+
+									<ng-template [ngIf]="alarma.estado == 'P'">
+										<div class="mt-2" style="display: table">
+											<span *ngFor="let dato of datosAprobacion"
+												style="font-size: .92rem; display: table-row">
+												<ng-template [ngIf]="dato.rol == 'SIS'" style="display: table-cell">
+													Sistemas:
+												</ng-template>
+												<ng-template [ngIf]="dato.rol == 'SAC'" style="display: table-cell">
+													Customer:
+												</ng-template>
+
+												<span
+													style="font-style: italic;display: table-cell; padding-left: 5px;	color: #616970;">
+													{{ dato.nombreUsuario |  titlecase}}
+													<small style="padding: 0 5px">-</small>
+													<small> {{ dato.fechaAprobacionUsuario | date:'LLLL dd, y, H:mm' }}
+													</small>
+													<span class="icon-info" [matTooltip]="comentariosAprobacion"
+														[matTooltipPosition]="'above'" [matTooltipClass]="'tooltipFont'"
+														style="margin-right: 5px" *ngIf="dato.rol == 'SIS'"></span>
+												</span>
+											</span>
+										</div>
+									</ng-template>
+
+								</div>
+								<div style="display:block" class="mt-2" *ngIf="alarma.estado == 'C'">
+									<strong class="mt-4">Razon de cancelacion</strong>
+									<span style="display: block">{{ datosCancelacion?.razonCancelacion }}</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- OPCIONES PARA CAMBIAR ESTADO -->
+						<div class="col-12 mt-4" style="display: flex; align-items: flex-start"
+							*ngIf="checkPermissionCambiarEstado() && !isDevolucion && !isProcesandoArchivo && alarma.estado != 'C'">
+							<span class="text-btn btn-primary btn" *ngIf="alarma.estado == 'P' && !isUserSol"
+								(click)="cambiarEstadoAlarma('A')">
+								Aprobar
+							</span>
+
+							<span class="text-btn btn-primary btn" *ngIf="alarma.estado == 'I'"
+								(click)="cambiarEstadoAlarma('A')">
+								Activar
+							</span>
+
+							<span class="text-btn btn btn-danger" *ngIf="alarma.estado == 'A'"
+								(click)="cambiarEstadoAlarma('I')">
+								Inactivar
+							</span>
+
+							<span class="text-btn btn btn-danger" *ngIf="alarma.estado == 'P' && !isUserSol"
+								(click)="cambiarEstadoAlarma()">
+								Devolver
+							</span>
+
+							<span class="text-btn btn btn-danger" *ngIf="alarma.estado != 'A' && isUserSol"
+								(click)="cambiarEstadoAlarma('C')">
+								Cancelar
+							</span>
+
+							<div style="display: inline-block;">
+								<div>
+									<span class="btn btn-light"
+										[ngStyle]="{'background': !isArchivoCargado && '#e3e8ec' || '#37d466'}"
+										*ngIf="alarma.estado == 'I' && isUserAdm && (alarma.archivo == 'SI' || alarma.archivo == 'AMBOS')"
+										onclick="inputFile.click()">
+										<span
+											[ngClass]="{'icon-file': !isArchivoCargado, 'icon-checkmark': isArchivoCargado}"></span>
+										{{ isArchivoCargado && 'Archivo cargado' || 'Cambiar archivo' }}
+									</span>
+									<small *ngIf="mensajeErrorCargaArchivo != null" class="text-danger"
+										style="padding-left: 10px">
+										{{ mensajeErrorCargaArchivo }}
+									</small>
+									<input type="file" id="inputFile" style="display: none"
+										(change)="onCargarArchivo($event)">
+								</div>
+
+								<div *ngIf="isArchivoCargado"
+									style="display: flex;flex-direction: column;justify-content: center;">
+									<span class="btn" style="text-align: left; cursor: pointer"
+										(click)="onModificarArchivo()">
+										<span class="icon-upload"></span> Subir
+									</span>
+									<span class="btn" style="text-align: left; cursor: pointer"
+										(click)="finalizarCarga()">
+										<span class="icon-x"></span> Cancelar
+									</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- PARA DEVOLVER LA SOLICITUD -->
+						<div class="col-8" *ngIf="isDevolucion">
+							<div class="row">
+								<div class="col-12 mt-4 form-group">
+									<label>Razon de devolucion</label>
+									<textarea name="" cols="30" rows="3" class="form-control"
+										formControlName="razonDevolucion"
+										placeholder="Escriba las razones por la que la solicitud sera devuelta"></textarea>
+								</div>
+								<div class="col-auto align-self-end">
+									<button class="btn btn-danger" (click)="onCancelarDevolucion()">Cancelar</button>
+									<button class="btn btn-primary" style="margin-left: 15px"
+										[disabled]="formulario.get('razonDevolucion').value == ''"
+										(click)="cambiarEstadoAlarma('D')">Enviar</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- DATOS DE FECHAS Y USUARIOS -->
+				<div class="col-4" style="position: relative; align-items: flex-end;overflow: hidden">
+					<div style="display: flex; flex-direction: column; align-items: flex-end">
+						<div style="display: flex" class="pb-2" *ngIf="checkPermissionEditar()">
+							<span (click)="cambiarEstadoModificacion('M') ; isDisabled = false;"
+								*ngIf="!onEditSAC && !onEditSIS && !onEditSol && !onEditAdm"
+								style="cursor: pointer; font-size: .95rem;font-weight: 600; color: #FD000D ">
+								<!-- <img [src]="'assets/img/edit.png'" style="width: 26px"> -->
+								<span
+									style="border-bottom: 2px solid #FD000D; padding: 0 7px 3px 7px;margin-left: -2px;  ">
+									<span class="icon-edit" style="padding-right: 8px"></span>
+									Editar
+								</span>
+							</span>
+
+							<span (click)="cambiarEstadoModificacion('F') ; isDisabled = true;"
+								*ngIf="onEditSAC || onEditSIS || onEditSol || onEditAdm"
+								style="cursor: pointer; font-size: .9rem;font-weight: 500; text-decoration: underline;padding-right: 10px">
+								Finalizar
+							</span>
+
+							<span (click)="cambiarEstadoModificacion('A') ; isDisabled = true;"
+								*ngIf="onEditSAC || onEditSIS || onEditSol || onEditAdm"
+								style="cursor: pointer; font-size: .9rem;font-weight: 500; text-decoration: underline">
+								Cancelar
+							</span>
+						</div>
+
+						<!-- FECHA INICIO -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Inició</span>
+							<p class="alarma__fecha text-muted" *ngIf="!onEditAdm && !onEditSol">
+								{{ alarma.fechaInicio | date}} </p>
+
+							<div class="form-group mt-1" *ngIf="onEditAdm || onEditSol">
+								<input type="date" class="form-control form-control-sm" formControlName="fechaInicio">
+							</div>
+						</small>
+
+						<!-- FECHA FIN -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Finaliza</span>
+							<p class="alarma__fecha text-muted" *ngIf="!onEditAdm && !onEditSol">
+								{{ alarma.fechaFin | date | fechaIndefinida}} </p>
+
+							<div class="form-group mt-1" *ngIf="onEditAdm || onEditSol">
+								<input type="date" class="form-control form-control-sm" formControlName="fechaFin">
+							</div>
+						</small>
+
+						<!-- FECHA REGISTRO -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Creada</span>
+							<p class="alarma__fecha text-muted"> {{ alarma.fechaRegistro | date:'LLLL dd, y, H:mm'}}
+							</p>
+						</small>
+
+						<!-- FECHA APROBACION -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end"
+							*ngIf="alarma.estado == 'A'">
+							<span>Aprobada</span>
+							<p class="alarma__fecha text-muted">
+								{{ datosAprobacion[0]?.fechaAprobacionAlm | date:'LLLL dd, y, H:mm' }} </p>
+						</small>
+
+						<!-- FECHA CANCELACION -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end"
+							*ngIf="alarma.estado == 'C'">
+							<span>Cancelada</span>
+							<p class="alarma__fecha text-muted">
+								{{ datosCancelacion?.fecha | date:'LLLL dd, y, H:mm' }} </p>
+						</small>
+
+						<!-- USUARIO REGISTRO -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Usuario creador </span>
+							<p class="alarma__fecha text-muted"> {{ alarma.usuarioRegistro | titlecase}} </p>
+						</small>
+
+						<!-- USUARIO SOLICITANTE -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Usuario solicitante</span>
+							<p class="alarma__fecha text-muted"> {{ alarma.usuarioSolicitante | cutPrefix | titlecase }}
+							</p>
+						</small>
+
+						<!-- AREA SOLICITANTE -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end">
+							<span>Area solicitante</span>
+							<p class="text-muted"> {{ areaSolicitante | titlecase}}
+							</p>
+						</small>
+
+						<!-- USUARIO MODIFICADOR -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end"
+							*ngIf="alarma.usuarioActualiza != null">
+							<span>Usuario modificador</span>
+							<p class="alarma__fecha text-muted"> {{ alarma.usuarioActualiza | titlecase}} </p>
+						</small>
+
+						<!-- FECHA MODIFICACION -->
+						<small style="display: flex; flex-direction: column; align-items: flex-end"
+							*ngIf="alarma.fechaActualiza != null">
+							<div>
+								<span>Fecha modificacion</span>
+							</div>
+							<p class="alarma__fecha text-muted"> {{ alarma.fechaActualiza |  date:'LLLL dd, y, H:mm' }}
+							</p>
+						</small>
+					</div>
+
+					<section class="historial-modificaciones" [@showHistMod]="isShowHistModificacion ? 'show' : 'hide'"
+						*ngIf="alarma.fechaActualiza != null">
+						<div *ngFor="let hist of historialModificaciones" class="modificacion">
+							<div style="display: flex; align-items: center">
+								<span
+									style="display: flex; flex-direction: column;align-items: center; padding: 0 10px;color: rgb(80, 80, 80)">
+									<span> {{ hist.fecha | date}} </span>
+									<span> {{ hist.fecha | date:'shortTime'}} </span>
+								</span>
+								<span style="display: flex; flex-direction: column;padding-left: 10px;max-width: 200px">
+									<span style="font-weight: 600"> {{ hist.campo | titlecase }} </span>
+									<span> {{ hist.valor }} </span>
+								</span>
+							</div>
+							<div>
+								<span style="padding-right: 10px"> {{ hist.usuario }} </span>
+								<span class="icon-info" [matTooltip]="hist.observaciones" [matTooltipPosition]="'above'"
+									[matTooltipClass]="'tooltipFont'"></span>
+							</div>
+						</div>
+					</section>
+				</div>
+			</form>
+		</div>
+
+		<div class="row"
+			*ngIf="alarma.estado == 'I' && (alarma.archivo == 'SI' || alarma.archivo == 'AMBOS') && isProcesandoArchivo">
+			<div class="col-12">
+				<app-barra-carga [arrayCarga]="listaSubscripciones" [idAlarma]="alarma.idAlarma"
+					[nombreArchivo]="nombreArchivo" [idArchivo]="datosArchivo.idArchivo" [modo]="'modificacion'"
+					(finalizar)="finalizarCarga()">
+				</app-barra-carga>
+			</div>
+		</div>
+
+		<!-- EN CASO DE QUE LA SOLICITUD FUE DEVUELTA -->
+		<div class="row">
+			<div class="col-12 mt-4" [ngClass]="{'contenedor-observaciones': observaciones.length > 3 }">
+				<div style="display: flex; justify-content: space-between">
+					<span style="font-weight: 600">
+						<ng-template [ngIf]="observaciones.length != 0">
+							Historial de Observaciones
+						</ng-template>
+					</span>
+					<span class="btnMostrarHistorial"
+						*ngIf="alarma.fechaActualiza != null && historialModificaciones.length != 0"
+						(click)="isShowHistModificacion = !isShowHistModificacion">
+						<span> {{ isShowHistModificacion  && 'Ocultar' || 'Mostrar' }} </span> Historial de
+						Modificaciones</span>
+				</div>
+
+				<app-observaciones [observaciones]="observaciones"
+					(onChangeStatusObservacion)="onCambiarEstadoObservacion($event)">
+				</app-observaciones>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+<ng-template #content let-modal>
+	<div class="modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Observaciones</h4>
+		<button type="button" class="close" aria-label="Close" (click)="cerrarModal()">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body">
+		<form>
+			<div class="form-group">
+				<textarea [(ngModel)]="observacioModificacion" class="form-control" cols="30" rows="4"
+					name="observacion" [placeholder]="placeholder"></textarea>
+			</div>
+			<small class="text-danger" *ngIf="errorModificacion">El campo no puede estar vacio</small>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button type="button" class="btn btn-outline-dark" (click)="confirmarModificacion()">Finalizar</button>
+	</div>
+</ng-template>

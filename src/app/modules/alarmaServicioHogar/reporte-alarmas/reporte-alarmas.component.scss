@@ -1,0 +1,90 @@
+@import '../../../../assets/sass/variables.scss';
+@import '../../../../assets/sass/predef.scss';
+
+table{
+  font-size: .9rem;
+  width: 100%;
+  overflow: auto;
+}
+
+.mat-header-row{
+  background: #FD000D ;
+  height: 40px;
+}
+
+button.mat-sort-header-button{
+  color: #fff !important;
+}
+
+button.mat-sort-header-button:hover{
+  color: red !important;
+}
+
+.mat-row{
+  height: 40px;
+}
+
+.mat-row:hover{
+  background: rgb(224, 224, 224);
+}
+
+th{
+  color: #fff;
+  font-weight: bold;
+}
+
+td,th{
+  text-align: center;
+}
+
+.mat-table{
+  overflow-x: scroll;
+}
+
+.col-12 {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  .mat-table {
+      width: 100%;
+      max-width: 100%;
+      margin-bottom: 1rem;
+      display: table;
+      border-collapse: collapse;
+      margin: 0px;
+  }
+  .mat-row,
+  .mat-header-row {
+      display: table-row;
+  }
+  .mat-cell,
+  .mat-header-cell {
+      word-wrap: initial;
+      display: table-cell;
+      padding: 0px 5px;
+      line-break: unset;
+      width: auto;
+      white-space: nowrap;
+      overflow: hidden;
+      vertical-align: middle;
+  }
+}
+
+.btn-generar-reporte{
+	border-radius: 25px;
+	background: #007bff ;
+	color: #fff;
+	font-size: .9rem;
+	margin-right: 10px;
+	font-weight: 600;
+	box-sizing: border-box;
+	padding: 5px 20px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.btn-generar-reporte:hover{
+	border: 1px solid $color-primario;
+	background: #fff;
+	color: $color-primario;
+}

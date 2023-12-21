@@ -1,0 +1,58 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+
+*{
+	outline: none !important;
+}
+
+html{
+	height: 100%;
+}
+
+body{
+	height: 100%;
+}
+
+textarea,
+input,
+a,
+select{
+	outline: none !important;
+}
+
+textarea{
+	// resize: none
+	resize: vertical;
+}
+
+strong{
+	font-weight: 600
+}
+
+.mat-tooltip.tooltipFont {
+	font-size: .71rem;
+ }
+ select:-moz-focusring{
+ color: transparent;
+ text-shadow: 0 0 0 #000;
+}
+
+.custom-scroll-bar::-webkit-scrollbar-track
+{
+    // -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: rgb(230, 230, 230);
+}
+
+.custom-scroll-bar::-webkit-scrollbar
+{
+    width: 10px;
+    background-color: #F5F5F5;
+}
+
+.custom-scroll-bar::-webkit-scrollbar-thumb
+{
+    background-color: #babac0;
+    // border: 2px solid #555555;
+}
+
+ 

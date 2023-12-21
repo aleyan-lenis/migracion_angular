@@ -1,0 +1,134 @@
+<div class="row mt-3 px-2 pb-5">
+	<div class="col-12" *ngIf="!isShowDetalleAlarma">
+		<div>
+			<div style="display:flex; justify-content: space-between; align-items: baseline">
+				<p style="font-size: 1.2rem; font-weight: 600">Alarmas Pendientes</p>
+			</div>
+
+			<div class="contenedor-alarmas" [ngClass]="{'contenedor-scroll': listaAlarmas.length > 3 }">
+				<div *ngFor="let alarma of listaAlarmas" class="alarma" (click)="onVerDetalleAlarma(alarma)">
+					<div style="display: flex; align-items: center">
+						<span style="font-size: .85rem"> {{ alarma.idAlarma }} </span>
+						<span style="margin-left: 10px;width: 15px; height: 15px; display: inline-block"
+							[ngStyle]="{'background': alarma.color}"></span>
+						<div style="margin-left: 10px; max-width: 700px;">
+							<span class="alarma__nombre" [title]="alarma.nombre">
+								{{ alarma.nombre | uppercase | sliceText:60 }}
+								<img [src]="'assets/img/file_2.png'" *ngIf="alarma.archivo == 'SI' || alarma.archivo == 'AMBOS'"
+									style="width: 10px;margin-left: 10px;margin-top: -5px">
+							</span>
+							<p style="font-size: .9rem; margin-bottom: 0"> {{ alarma.detalle | capitalLetter | sliceText:90}}
+							</p>
+						</div>
+					</div>
+					<div>
+						<div class="alarma__fechas">
+							<small style="display: flex; flex-direction: column; align-items: flex-end">
+								<span>Solicitada</span>
+								<p class="alarma__fecha text-muted">
+									{{ alarma.fechaRegistro | date:'LLLL dd, y, H:mm' | fechaIndefinida}} </p>
+							</small>
+						</div>
+					</div>
+				</div>
+			</div>
+			<app-no-content *ngIf="!isLoadingAlarmas" [lista]="listaAlarmas" [contenido]="'alarmas pendientes'">
+			</app-no-content>
+			<app-loader *ngIf="isLoadingAlarmas"></app-loader>
+		</div>
+
+		<div>
+			<div style="display:flex; justify-content: space-between; align-items: baseline">
+				<p style="font-size: 1.2rem; font-weight: 600">Alarmas {{ lblAlarmaEstadoActual }}</p>
+				<div style="padding: 3px 10px">
+					<app-switch (optionChanged)="cambiarAlarmasEstado($event)" [firstOption]="lblAlarmaAprobada"
+						[secondOption]="lblAlarmaCancelada"></app-switch>
+				</div>
+			</div>
+
+			<div class="contenedor-alarmas" [ngClass]="{'contenedor-scroll': alarmasAprobadas.length > 3 }">
+				<ng-template [ngIf]="lblAlarmaEstadoActual == lblAlarmaAprobada">
+					<div *ngFor="let alarma of alarmasAprobadas" class="alarma" (click)="onVerDetalleAlarma(alarma)">
+						<div style="display: flex; align-items: center">
+							<span style="font-size: .85rem"> {{ alarma.idAlarma }} </span>
+							<span style="margin-left: 10px;width: 15px; height: 15px; display: inline-block"
+								[ngStyle]="{'background': alarma.color}"></span>
+							<div style="margin-left: 10px; max-width: 600px;">
+								<span class="alarma__nombre">
+									{{ alarma.nombre | uppercase }}
+									<img [src]="'assets/img/file_2.png'" *ngIf="alarma.archivo == 'SI' || alarma.archivo == 'AMBOS'"
+										style="width: 10px;margin-left: 10px;margin-top: -5px">
+								</span>
+								<p style="font-size: .9rem; margin-bottom: 0"> {{ alarma.detalle | capitalLetter}} </p>
+
+							</div>
+						</div>
+						<div>
+							<div class="alarma__fechas">
+								<small style="display: flex; flex-direction: column; align-items: flex-end">
+									<span>Solicitada</span>
+									<p class="alarma__fecha text-muted">
+										{{ alarma.fechaRegistro | date:'LLLL dd, y, H:mm' | fechaIndefinida}} </p>
+								</small>
+							</div>
+						</div>
+					</div>
+					<app-no-content *ngIf="!isLoadingAlarmasUsuarios" [lista]="alarmasAprobadas"
+						[contenido]="'alarmas aprobadas'">
+					</app-no-content>
+					<app-loader *ngIf="isLoadingAlarmasUsuarios"></app-loader>
+				</ng-template>
+
+				<ng-template [ngIf]="lblAlarmaEstadoActual == lblAlarmaCancelada">
+					<div *ngFor="let alarma of alarmasCanceladas" class="alarma" (click)="onVerDetalleAlarma(alarma)">
+						<div style="display: flex; align-items: center">
+							<span style="font-size: .85rem"> {{ alarma.idAlarma }} </span>
+							<span style="margin-left: 10px;width: 15px; height: 15px; display: inline-block"
+								[ngStyle]="{'background': alarma.color}"></span>
+							<div style="margin-left: 10px; max-width: 600px;">
+								<span class="alarma__nombre">
+									{{ alarma.nombre | uppercase }}
+									<img [src]="'assets/img/file_2.png'" *ngIf="alarma.archivo == 'SI' || alarma.archivo == 'AMBOS'"
+										style="width: 10px;margin-left: 10px;margin-top: -5px">
+								</span>
+								<p style="font-size: .9rem; margin-bottom: 0"> {{ alarma.detalle | capitalLetter}} </p>
+
+							</div>
+						</div>
+						<div>
+							<div class="alarma__fechas">
+								<small style="display: flex; flex-direction: column; align-items: flex-end">
+									<span>Solicitada</span>
+									<p class="alarma__fecha text-muted">
+										{{ alarma.fechaRegistro | date:'LLLL dd, y, H:mm' | fechaIndefinida}} </p>
+								</small>
+							</div>
+						</div>
+					</div>
+					<app-no-content *ngIf="!isLoadingAlarmasUsuarios" [lista]="alarmasCanceladas"
+						[contenido]="'alarmas canceladas'">
+					</app-no-content>
+					<app-loader *ngIf="isLoadingAlarmasUsuarios"></app-loader>
+				</ng-template>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="col-12" *ngIf="isShowDetalleAlarma">
+		<div class="row">
+			<div class="col-12">
+				<a style="cursor: pointer; 
+					text-decoration: underline;
+					font-weight: 500;
+					font-size: .9rem;
+					color: red" (click)="onMostraAlarmas()">Volver</a>
+			</div>
+
+			<div class="col-12">
+				<app-modificar-alarma [alarma]="alarmaSeleccionada" (onModificarAlarma)="modificarAlarma($event)">
+				</app-modificar-alarma>
+			</div>
+		</div>
+	</div>
+</div>

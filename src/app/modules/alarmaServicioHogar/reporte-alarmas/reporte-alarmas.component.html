@@ -1,0 +1,89 @@
+<div class="row mt-2 px-2">
+  <div class="col-12">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+			<p style="font-size: 1.3rem; font-weight: 500">Reporte de Alarmas</p>
+			<div>
+				<span class="btn btn-light btn-generar-reporte"
+					(click)="onGenerarReporte()">Generar Reporte</span>
+			</div>
+		</div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="fecha_ingreso">
+        <th mat-header-cell *matHeaderCellDef> Fecha ingreso </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.fecha_ingreso | date}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="id_ticket">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID Ticket </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.id_ticket | number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nivel2">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nodo </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.nivel2 | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nivel1">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Hub </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.nivel1 | titlecase }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="ciudad">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ciudad </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.ciudad | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tipo_prob">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Problema </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.tipo_prob | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="cantidad_afectados">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Cantidad Afectados  </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.cantidad_afectados | number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="hora_inicio">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Hora Inicio </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.hora_inicio | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="hora_actualizacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Hora Actualización Snr  </th>
+        <td mat-cell *matCellDef="let alarma"> {{obtenerHoraModif(alarma.fecha_modificacion)}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="hora_fin">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Hora Fin  </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.hora_fin | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="atencion_asesor">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Paso Al Asesor </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.atencion_asesor | number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="tiempo_trabajado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> TIempo Trabajo  </th>
+        <td mat-cell *matCellDef="let alarma"> {{dateDiff(alarma.fecha_inicio, alarma.fecha_fin,alarma.hora_inicio,alarma.hora_fin).time}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="numero_ingresos">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Veces Ingreso </th>
+        <td mat-cell *matCellDef="let alarma"> {{alarma.numero_ingresos | number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dias_trabajados">
+        <th mat-header-cell *matHeaderCellDef> Días Trabajados </th>
+        <td mat-cell *matCellDef="let alarma"> {{dateDiff(alarma.fecha_inicio,alarma.fecha_fin,alarma.hora_inicio,alarma.hora_fin).dias}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+  </div>
+  <mat-paginator [pageSizeOptions]="[10, 15, 25]" [color]="'warn'" showFirstLastButtons></mat-paginator>
+</div>

@@ -1,0 +1,40 @@
+
+<div class="row justify-content-center">
+	<div class="col-12">
+		<div class="mt-2">
+			<div class="mt-4">
+				<mat-progress-bar mode="determinate" [value]="porcentajeCarga" [color]="'warn'"></mat-progress-bar>
+				<p class="mt-1 text-muted">
+					<span *ngIf="isProcesando && porcentajeCarga == 0">Inicializando...</span>
+					<span *ngIf="isProcesando && porcentajeCarga > 0">Procesando...</span>
+					<span *ngIf="!isProcesando && porcentajeCarga >= 100">Finalizado</span>
+				</p>
+			</div>
+
+			<div style="font-size:.95rem">
+				<span class="parametro">Registros procesados : </span>
+				<span> {{ registrosProcesados }} </span>
+			</div>
+
+			<div style="font-size:.95rem">
+
+				<span class="parametro">Registros insertados : </span>
+				<span> {{ registrosExitosos }} </span>
+			</div>
+
+			<div style="font-size:.95rem">
+				<span class="parametro">Registros con errores : </span>
+				<span> {{ registrosConErrores }} </span>
+				<ng-template [ngIf]="arrayConErrores.length != 0 && !isProcesando">
+					<span>-</span>
+					<a (click)="onGenerarReporteErrores()" class="enlace-opcion text-danger"> Descargar reporte de
+						errores</a>
+				</ng-template>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-auto mt-3" *ngIf="porcentajeCarga == 100">
+		<button type="button" class="btn btn-primary" (click)="onFinalizarOperacion()">Finalizar</button>
+	</div>
+</div>

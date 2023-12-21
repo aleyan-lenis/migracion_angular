@@ -1,0 +1,18 @@
+%position-absolute{
+   position: absolute;
+	top: 0px;
+	left: 0;
+	right: 0;
+   bottom: 0;
+   margin: auto;
+}
+
+%contenido-wrapper-img{
+   width: 100%;
+   vertical-align: top;
+}
+
+%custom-scroll-bar{
+	scrollbar-color: #babac0 rgb(230, 230, 230);
+	scrollbar-width: thin;
+}

@@ -1,0 +1,6 @@
+<div *ngIf="lista?.length == 0 || lista == undefined" class="no-content-container">
+	<div class="no-content-img-wrapp">
+		<img [src]="'assets/img/exclamation.png'">
+	</div>
+	<p class="no-content-text">No existen {{ contenido }}</p>
+</div>

@@ -1,0 +1,68 @@
+<div class="row mt-2 px-2">
+  <div class="col-12">
+    <div style="display: flex; align-items: center">
+      <p style="font-size: 1.3rem; font-weight: 500">Gestion de Atribuible</p>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-auto" style="padding: 10px;">
+        <button class="btn btn-primary" (click)="openDialog()">Nuevo Atribuible</button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Opciones </th>
+        <td mat-cell *matCellDef="let atribuible">
+          <button class="btn btn-primary" (click)=" modificarNombre(atribuible.position) " >Modificar</button>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="idAtribuible">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> ID Atribuible </th>
+        <td mat-cell *matCellDef="let atribuible"> {{atribuible.id_catalogo | number}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre  </th>
+        <td mat-cell *matCellDef="let atribuible">{{atribuible.descripcion | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+        <td mat-cell *matCellDef="let atribuible">
+          <input type="checkbox" mat-checkbox *ngIf="atribuible.id_estado == 0" (click)="modificarEstado(atribuible.position)">
+          <input type="checkbox" checked mat-checkbox *ngIf="atribuible.id_estado == 1" (click)="modificarEstado(atribuible.position)">
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="usuarioRegistro">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario Registro  </th>
+        <td mat-cell *matCellDef="let atribuible"> {{atribuible.usuario_creacion | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaRegistro">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro </th>
+        <td mat-cell *matCellDef="let atribuible"> {{atribuible.fecha_creacion | date}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="usuarioModificacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Usuario de última modificación  </th>
+        <td mat-cell *matCellDef="let atribuible"> {{atribuible.usuario_modificiacion | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaModificacion">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de Ultima Modificación </th>
+          <td mat-cell *matCellDef="let atribuible"> {{atribuible.fecha_modificacion | date}} </td>
+        </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [color]="'warn'" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

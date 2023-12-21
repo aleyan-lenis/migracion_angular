@@ -1,0 +1,40 @@
+@import '../../../assets/sass/variables.scss';
+
+.active{
+	background: $color-primario !important;
+	border: $color-primario;
+	color: #fff !important;
+}
+
+.toggle-button{
+	width: 20px;
+	height: 20px; 
+	cursor: pointer;
+}
+
+.menu a.nav-link{
+	color: #000;
+}
+
+.link-secundario{
+	color: #2c2c2c;
+	font-size: .95rem;
+	text-decoration: underline !important;
+	font-style: italic
+}
+
+.titulo-pagina{
+	margin-left: 10px; 
+	font-weight: 500;
+	color: #504f4f;
+}
+
+.wrapper-logo{
+   width: 50px;
+	margin: 0 auto;
+}
+
+.wrapper-logo img{
+	width: 100%;
+	vertical-align: top;
+}

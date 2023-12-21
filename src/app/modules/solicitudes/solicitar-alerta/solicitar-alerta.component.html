@@ -1,0 +1,239 @@
+<div class="row mt-4 justify-content-center">
+	<div class="col-12 formulario">
+		<h3 class="text-center">Solicitar nueva alarma</h3>
+		<form (ngSubmit)="onRegistrarAlarma($event)" [formGroup]="formulario" class="row mt-4 justify-content-center"
+			*ngIf="!isProcesandoAlertas && isOperacionFinalizada">
+			<div class="col-lg-10 col-xl-7">
+				<div class="row">
+					<div class="form-group col-12">
+						<label>Solicitante: <span style="color:red">*</span></label>
+						<div class="row mx-1">
+							<select class="form-control " style="width: 40%" formControlName="area">
+								<option [value]="codigoArea"> {{ nombreArea | titlecase}} </option>
+								<option [value]="area.codigo" *ngFor="let area of listaAreas">
+									{{ area.nombre | titlecase }} </option>
+							</select>
+
+							<div class="contenedor-solicitantes"  *ngIf="!isSolicitanteDefecto">
+								<div style="display: flex;width: 100%;margin-left: 1%;">
+									<input type="text" placeholder="Buscar usuario ..." class="form-control"
+										style="width: 100%;padding-right: 25px;" (keyup)="onBuscarUsuario($event)"
+										value="{{ nombreUsuario | titlecase }}">
+
+									<div style="margin-left: -25px;margin-top: 5px;">
+										<img [src]="'assets/img/search.png'" alt="" style="width: 15px">
+									</div>
+								</div>
+
+								<div class="form-group" *ngIf="isSearch && usuariosSolicitantes.length != 0" style="position: absolute;width: 100%;z-index: 100;">
+									<ul class="containers-user custom-scroll-bar">
+										<li *ngFor="let usuario of solicitantes" (click)="chooseUsuario(usuario.username)">
+											{{ usuario.nombre | titlecase}}</li>
+									</ul>
+								</div>
+
+								<span class="text-danger" style="display: block; font-size: .9rem;padding: 2px 0px 0px 5px"
+									*ngIf="isSearch && solicitantes.length == 0">No
+									se encontraron resultados</span>
+							</div>
+
+							<input type="text" class="form-control" style="width: 58%;margin-left: 1%"
+								formControlName="solicitante" value="{{ nombreSolicitante | titlecase}}"
+								*ngIf="isSolicitanteDefecto">
+						</div>
+
+						<a class="text-muted" style="text-decoration: underline; cursor: pointer;font-size: .9rem;"
+							(click)="cambiarSolicitante()">
+							Cambiar solicitante</a>
+					</div>
+
+					<div class="form-group col-6">
+						<label>Nombre de alarma <span style="color:red">*</span></label>
+						<input type="text" placeholder="Nombre" class="form-control " autocomplete="off" maxlength="200"
+							formControlName="nombre" #txtNombre (keyup)="calcularCaracteres(txtNombre)" name="nombre">
+						<small style="float: right" class="form-text text-muted">{{ caracteresNombre }}
+							caracteres</small>
+					</div>
+
+					<div class="form-group col-6">
+						<label>Texto a mostrar al asesor <span style="color:red">*</span></label>
+						<input type="text" placeholder="Detalle" class="form-control" autocomplete="off"
+							formControlName="detalle" #detalle (keyup)="calcularCaracteres(detalle)" name="detalle">
+						<small style="float: right" class="form-text text-muted">{{ caracteresDetalle }}
+							caracteres</small>
+					</div>
+
+					<div class="form-group col-12">
+						<label>Tipo de Implementaci&oacute;n</label>
+						<div class="row justify-content-between">
+							<div class="col-4">
+								<div class="form-check">
+									<input class="form-check-input" type="radio" name="archivo" [value]="archivo[0]"
+										id="checkSi" formControlName="archivo">
+									<label class="form-check-label" for="checkSi">Archivo</label>
+								</div>
+
+								<div class="form-check">
+									<input class="form-check-input" name="archivo" type="radio" [value]="archivo[1]"
+										id="checkNo" formControlName="archivo">
+									<label class="form-check-label" for="checkNo">Condiciones</label>
+								</div>
+								<div class="form-check">
+									<input class="form-check-input" name="archivo" type="radio" [value]="archivo[2]"
+										id="checkAmb" formControlName="archivo">
+									<label class="form-check-label" for="checkAmb">Archivo y Condiciones</label>
+								</div>
+							</div>
+							<div class="col-auto" style="display: flex; align-items: flex-end; flex-direction: column"
+								*ngIf="formulario.get('archivo').value == 'SI' || formulario.get('archivo').value == 'AMBOS'">
+
+								<ng-template [ngIf]="!isArchivoCargado">
+									<input type="file" style="display: none" id="inputFile"
+										(change)="onCargarArchivo($event)">
+									<div style="display: flex; flex-direction: column">
+
+										<label for="inputFile"
+											style="text-decoration: underline;cursor: pointer; font-size: .92rem; text-align: end">
+											Subir archivo
+										</label>
+										<div>
+											<span class="icon-info" [matTooltip]="formatoArchivo"
+												[matTooltipPosition]="'above'" [matTooltipClass]="'tooltipFont'"
+												style="margin-right: 5px;font-size: .8rem"></span>
+											<small class="text-muted">Formatos validos: csv</small>
+										</div>
+									</div>
+									<span class="text-danger" style="font-size: .8rem"> {{ mensajeErrorCargaArchivo }}
+									</span>
+								</ng-template>
+
+								<ng-template [ngIf]="isArchivoCargado">
+									<div class="col-12">
+										<span style="margin-right: 10px; font-size: .9rem;color: #a50000">
+											<label for="idcancelFile" (click)="onReiniciarFile()"
+											style="text-decoration: underline;cursor: pointer; font-size: .92rem; text-align: end">
+												Cancelar archivo
+											</label>
+										</span>
+										<span style="font-size: .9rem;color: #00a542">
+											<img [src]="'assets/img/check.png'" style="margin-right: 4px; width: 18px">
+											Archivo cargado
+										</span>
+										<br>
+										<div class="col-24">
+											<span class="text-muted" style="font-size: .85rem;display: inherit;text-align: right;">
+												{{ nombreArchivo }} -
+												{{ listaSubscripciones.length }} Registros
+											</span>
+										</div>
+								</div>
+								</ng-template>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group col-12">
+						<label>Condiciones de alarma <span *ngIf="(formulario.get('archivo').value == 'NO' || formulario.get('archivo').value == 'AMBOS')"
+								style="color:red">*</span></label>
+						<textarea name="condiciones" rows="5" class="form-control" formControlName="condiciones"
+							placeholder="AQUÍ redacte  las condiciones que el sistema debe validar automáticamente para que se visualice la alarma en Vista 360"></textarea>
+					</div>
+
+					<div class="form-group col-12">
+						<label>Tipo de alarma <span style="color:red">*</span></label>
+						<select class="form-control" formControlName="tipoAlarma">
+							<option value="">Seleccione el tipo de alerta</option>
+							<option [value]="tipo.idTipoAlarma" *ngFor="let tipo of tiposAlarmas">
+								{{ tipo.tipo | titlecase}}
+							</option>
+						</select>
+					</div>
+
+					<div class="form-group col-6">
+						<label>Fecha Inicio <span style="color:red">*</span></label>
+						<input type="date" class="form-control" formControlName="fechaInicio">
+					</div>
+
+					<div class="form-group col-6">
+						<div style="display: flex; justify-content: space-between">
+							<label>Fecha Fin: <span *ngIf="!isAlarmaIndefinida" style="color:red">*</span></label>
+							<div class="form-check d-flex">
+								<label for="alarma-indefinida" class="text-muted form-check-label"
+									style="text-decoration: underline; cursor: pointer;font-size: .9rem;">
+									Alarma indefinida</label>
+								<input type="checkbox" class="form-check-input" id="alarma-indefinida"
+									formControlName="indefinida" (change)="onAlarmaIndefinida()">
+							</div>
+						</div>
+						<input type="date" class="form-control" formControlName="fechaFin">
+					</div>
+
+					<div class="col-12">
+						<small style="color: red">(*) Los campos son requeridos</small>
+					</div>
+
+					<div class="form-group col-12 mt-3">
+						<div class="row">
+							<div class="col-6">
+								<button type="submit" class="btn btn-block btn-primary" [disabled]="formulario.invalid || (
+										(formulario.get('archivo').value == 'SI' || formulario.get('archivo').value == 'AMBOS') &&
+										!isArchivoCargado
+									) || !isCorrectFormatFeatures || !isCorrectFormatPlanes">Registrar</button>
+							</div>
+							<div class="col-6">
+								<button type="button" class="btn btn-block btn-danger" (click)="onReiniciarFormulario()"
+									[disabled]="formulario.untouched && !isArchivoCargado">Cancelar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+	<div class="col-8" *ngIf="!isOperacionFinalizada">
+		<ng-template [ngIf]="porcentajeCarga != 100">
+			<app-loader [tamaño]="'lg'"></app-loader>
+		</ng-template>
+		<div class="row justify-content-center mb-3" *ngIf="porcentajeCarga == 100">
+			<div class="col-auto">
+				<img [src]="'assets/img/listo.png'" style="width: 50px">
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-auto" style="display: flex; flex-direction: column; align-items: center">
+				<span class="text-muted"><img [src]="'assets/img/check.png'" alt=""
+						style="width: 15px;margin-right: 5px">
+					Alarma registrada correctamente</span>
+				<span *ngIf="porcentajeCarga != 100">
+					{{ porcentajeCarga }}%
+					Subiendo archivo
+				</span>
+				<span *ngIf="porcentajeCarga == 100" class="text-muted">
+					<img [src]="'assets/img/check.png'" alt="" style="width: 15px;margin-right: 5px">
+					Archivo cargado correctamente
+				</span>
+			</div>
+		</div>
+
+    <div class="col-8" *ngIf="!isArchivoCondicion">
+      <app-barra-carga [arrayCarga]="listaSubscripciones" [idAlarma]="idAlarma" [idArchivo]="idArchivo"
+        [nombreArchivo]="nombreArchivo" [modo]="'creacion'"
+        (resultadosCarga)="registrarInformacionCargaArchivo($event)"
+        (updatePorcentajeCarga)="actualizarPorcentajeCarga($event)" (finalizar)="finalizarCarga()">
+      </app-barra-carga>
+    </div>
+
+    <div class="col-8" *ngIf="isArchivoCondicion">
+      <app-barra-carga-condicion [arrayCarga]="listaSubscripciones" [idAlarma]="idAlarma" [idArchivo]="idArchivo"
+        [nombreArchivo]="nombreArchivo" [modo]="'creacion'"
+        (resultadosCargaCondicion)="registrarInformacionCargaArchivoCondicion($event)"
+        (updatePorcentajeCarga)="actualizarPorcentajeCarga($event)" (finalizar)="finalizarCarga()">
+      </app-barra-carga-condicion>
+    </div>
+
+	</div>
+
+
+</div>

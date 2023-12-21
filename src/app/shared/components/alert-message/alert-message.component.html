@@ -1,0 +1,15 @@
+<div  [@openClose]="isActiveMessage ? 'down':'up'" class="contenedor-mensaje-alerta" 
+	[ngClass]="{'success': alerta?.tipo == 'success', 'warning': alerta?.tipo == 'warning', 'error': alerta?.tipo == 'error'}">
+	<div>
+		<span class="mensaje">
+			<span class="icon" 
+				[ngClass]="{'icon-checkmark': alerta?.tipo == 'success', 
+								'icon-x': alerta?.tipo == 'error', 
+								'icon-warning':alerta?.tipo == 'warning'}"></span>
+			<span style="padding-left: 5px">
+				{{ alerta?.mensaje }}
+			</span>
+		</span>
+	</div>
+	<span (click)="toggle()" class="btn-close">X</span>
+</div>

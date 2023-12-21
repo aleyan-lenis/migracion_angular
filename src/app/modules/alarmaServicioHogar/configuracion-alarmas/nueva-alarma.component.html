@@ -1,0 +1,667 @@
+<div class="row mt-4 justify-content-start" id="all-content">
+  <div class=".col-12 formulario">
+    <h3 class="text-start">{{ data.modo != 'Editar'  ? 'Crear Nueva Alarma' : 'Modificar Alarma' }}</h3>
+    <form
+      [formGroup]="formulario"
+      class="row mt-4 justify-content-start"
+      (ngSubmit)="submit($event)"
+    >
+
+      <div class=".col-xl-6">
+        <div class="row">
+          <div class="col-xl-2">
+            <label> N° Ticket: </label>
+          </div>
+          <div class="col-xl-2">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 60%;"
+              autocomplete="off"
+              maxlength="200"
+              formControlName="nTicket"
+              name="nTicket"
+              disabled
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-2">
+            <label> Alarmado por: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <select
+              class="form-control"
+              formControlName="alarmadoPor"
+              name="alarmadoPor"
+              style="width: 80%;"
+            >
+              <option [value]="alm.descripcion" *ngFor="let alm of alarmadoPor">
+                {{ alm.descripcion }}
+              </option>
+            </select>
+          </div>
+          <div class="col-xl-3">
+            <label>
+              Confirmado por NOC: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label
+            >
+          </div>
+          <div class="col-xl-2">
+            <select
+              class="form-control"
+              formControlName="confirmacionPorNOC"
+              name="confirmacionPorNOC"
+              style="width: 80%;"
+            >
+              <option
+                [value]="conf.descripcion"
+                *ngFor="let conf of confirmacion"
+              >
+                {{ conf.descripcion  }}
+              </option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-2">
+            <label>Tipo de Evento: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-5">
+            <select
+              class="form-control"
+              formControlName="tipoEvento"
+              name="tipoEvento"
+            >
+              <option
+                [value]="tipo.descripcion"
+                *ngFor="let tipo of tiposEventos"
+              >
+                {{ tipo.descripcion  }}
+              </option>
+            </select>
+          </div>
+          <div class="col-xl-2">
+            <label> N° Ticket NOC: </label>
+          </div>
+          <div class="col-xl-2">
+            <input
+              type="text"
+              class="form-control"
+              style="width: 100%"
+              autocomplete="off"
+              formControlName="nTicketNOC"
+              name="nTicketNOC"
+              maxlength="7"
+            />
+          </div>
+        </div>
+      </div>
+
+      <h5>Tiempo estimado de solución de la afectación</h5>
+      <div id="tiempo">
+        <div class="row">
+          <div class="col-xl-1">
+            <label> Fecha de Inicio: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <input
+              type="date"
+              class="form-control"
+              autocomplete="off"
+              formControlName="fechaInicio"
+              name="fechaInicio"
+              (change)="updateDate($event)"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Hora de Inicio: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              formControlName="horaInicio"
+              name="horaInicio"
+              style="width: 60%"
+              (change)="updatehour($event)"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Fecha Posible Sol: </label>
+          </div>
+          <div class="col-xl-2">
+            <input
+              type="date"
+              class="form-control"
+              autocomplete="off"
+              formControlName="fechaPosSol"
+              name="fechaPosSol"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Tiempo Posible Sol: </label>
+          </div>
+          <div class="col-xl-1.2">
+            <input
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              formControlName="tiempoPosSol"
+              name="tiempoPosSol"
+            />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-1">
+            <label> Estado: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <select
+              class="form-control"
+              formControlName="estado"
+              name="estado"
+              (ngModelChange)="cambioEstado($event)"
+            >
+              <option
+                selected
+                disabled
+                hidden
+                [value]="estadoPorDefecto"
+                style="width: 100%"
+              >
+                {{ estadoPorDefecto  }}
+              </option>
+              <option
+                [value]="estado.descripcion"
+                style="width: 100%"
+                *ngFor="let estado of estados"
+              >
+                {{ estado.descripcion  }}
+              </option>
+            </select>
+          </div>
+          <div class="col-xl-1">
+            <label> Fecha de Fin: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <input #fechaFin
+              type="date"
+              class="form-control"
+              autocomplete="off"
+              formControlName="fechaFin"
+              name="fechaFin"
+              style="width: 100%"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Hora de Fin: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <input #horaFin
+              type="time"
+              class="form-control"
+              autocomplete="off"
+              formControlName="horaFin"
+              name="horaFin"
+              style="width: 60%"
+            />
+          </div>
+          <div class="col-xl-1.5">
+            <div class="row">
+              <div class="col-xl-0.5">
+                <input type="checkbox"
+                  id="activaVoceo"
+                  style="margin-left: 1px;"
+                  (change)="activarVoceo()"
+                  [checked]="activaVoceo">
+              </div>
+              <div class="col">
+                <label style="margin-left: 2px;"> Activa <br> Voceo </label>
+              </div>
+              <div class="col-xl-0.5">
+                <input type="checkbox"
+                  id="activaAsesor"
+                  [disabled]="activaVoceo === false"
+                  (change)="asesor()"
+                  [checked]="activaAsesor">
+              </div>
+              <div class="col">
+                <label style="margin-left: 2px;"> Atención <br> Asesor </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-1">
+            <label> Usuario: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-3">
+            <input
+              type="text"
+              class="form-control"
+              value="{{ nombreSolicitante  }}"
+              autocomplete="off"
+              name="usuario"
+              formControlName="usuario"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Fecha Ingreso: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <input #fechaIngreso
+              type="date"
+              class="form-control"
+              style="width: 100%"
+              autocomplete="off"
+              name="fechaIngreso"
+              formControlName="fechaIngreso"
+            />
+          </div>
+          <div class="col-xl-1">
+            <label> Severidad: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+          </div>
+          <div class="col-xl-2">
+            <select
+              class="form-control"
+              name="severidad"
+              formControlName="severidad"
+              style="width: 60%;"
+            >
+              <option [value]="s.descripcion" *ngFor="let s of severidad">
+                {{ s.descripcion  }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <h5>Datos técnicos de afectación</h5>
+      <div id="datos-tecnicos">
+        <div class="w-100"></div>
+        <div class="row">
+          <div class="col">
+            <div class="row">
+              <label> Ciudad <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <select
+                class="form-control"
+                name="ciudad"
+                formControlName="ciudad"
+                (change)="guardarCodigoCiudad($event)"
+              >
+                <option
+                  [value]="ciudad.nombre"
+                  style="width: 100%"
+                  *ngFor="let ciudad of ciudades">
+                  {{ ciudad.nombre }}
+                </option>
+              </select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.ciudad }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <label> Tecnología <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <mat-select
+                class="form-control"
+                name="tecnologia"
+                formControlName="tecnologia"
+                (selectionChange)="guardarCodigoTecnologia($event)"
+              >
+                <mat-option
+                  [value]="tecnologia.descripcion"
+                  style="width: 100%"
+                  *ngFor="let tecnologia of tecnologias"
+                >
+                  {{ tecnologia.descripcion }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.tecnologia }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <label> Nivel 1 <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <mat-select
+                multiple
+                class="form-control"
+                name="nivel1"
+                formControlName="nivel1"
+                (selectionChange)="guardarCodigoNivel1($event)"
+              >
+                <mat-select-trigger>
+                  {{ selectsTotalFlags.nivel1.message  }}
+                </mat-select-trigger>
+                <mat-option value="TODOS" style="width: 100%" >
+                  {{
+                    (!selectsTotalFlags.nivel1.TODOS ? "TODOS" : "NINGUNO")
+
+                  }}
+                </mat-option>
+                <ng-template ngFor let-hub [ngForOf]="niveles1">
+                <mat-option
+                  [value]="hub.descripcion"
+                  style="width: 100%"
+                >
+                  {{ hub.descripcion  }}
+                </mat-option>
+                </ng-template>
+              </mat-select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.nivel1 }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <label> Nivel 2 </label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <mat-select
+                multiple
+                class="form-control"
+                name="nivel2"
+                formControlName="nivel2"
+                (selectionChange)="guardarCodigoNivel2($event)"
+              >
+                <mat-select-trigger>
+                  {{ selectsTotalFlags.nivel2.message  }}
+                </mat-select-trigger>
+                <mat-option value="TODOS" style="width: 100%">
+                  {{
+                    (!selectsTotalFlags.nivel2.TODOS ? "TODOS" : "NINGUNO")
+
+                  }}
+                </mat-option>
+                <mat-option
+                  [value]="nivel2.dato_equipo"
+                  style="width: 100%"
+                  *ngFor="let nivel2 of niveles2"
+                >
+                  {{ nivel2.dato_equipo  }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.nivel2 }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <label> Nivel 3 </label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <mat-select
+                multiple
+                class="form-control"
+                name="nivel3"
+                formControlName="nivel3"
+                (selectionChange)="guardarCodigoNivel3($event)"
+              >
+                <mat-select-trigger>
+                  {{ selectsTotalFlags.nivel3.message  }}
+                </mat-select-trigger>
+                <mat-option value="TODOS" style="width: 100%">
+                  {{
+                    (!selectsTotalFlags.nivel3.TODOS ? "TODOS" : "NINGUNO")
+
+                  }}
+                </mat-option>
+                <ng-container
+                *ngFor="let nivel3 of niveles3 ">
+                <mat-option
+                  [value]="nivel3.dato_equipo"
+                  style="width: 100%"
+                  *ngIf="nivel3.dato_equipo"
+                >
+                  {{ nivel3.dato_equipo  }}
+                </mat-option>
+                </ng-container>
+              </mat-select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.nivel3 }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="col">
+            <div class="row">
+              <label> Nivel 4</label>
+            </div>
+            <div class="row" *ngIf="data.modo != 'Editar'">
+              <mat-select
+                multiple
+                class="form-control"
+                name="nivel4"
+                formControlName="nivel4"
+                (selectionChange)="guardarCodigoNivel4($event, 4)"
+              >
+                <mat-select-trigger>
+                  {{ selectsTotalFlags.nivel4.message  }}
+                </mat-select-trigger>
+                <mat-option value="TODOS" style="width: 100%">
+                  {{
+                    (!selectsTotalFlags.nivel4.TODOS ? "TODOS" : "NINGUNO")
+
+                  }}
+                </mat-option>
+                <mat-option
+                  [value]="nivel4.dato_equipo"
+                  style="width: 100%"
+                  *ngFor="let nivel4 of niveles4"
+                >
+                  {{ nivel4.dato_equipo  }}
+                </mat-option>
+              </mat-select>
+            </div>
+            <div class="row" *ngIf="data.modo == 'Editar'">
+              <select
+              class="form-control">
+                <option
+                  style="width: 100%"
+                  disabled selected hidden>
+                  {{ data.alarma.nivel4 }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="w-100"></div>
+      </div>
+
+      <div class="row">
+        <div class=".col-xl-12">
+          <div id="servicios" style="height: 300px; width: 250px;">
+            <div class="row">
+              <h5> Servicios afectados </h5>
+            </div>
+            <div class="row">
+              <div class="col-xl-1">
+                <input type="checkbox"
+                  id="srv_internet"
+                  style="margin-left: 3px;"
+                  [checked]="srv_internet"
+                  (change)="validaFormulario($event)">
+              </div>
+              <div class="col-xl-1">
+                <label> Internet </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-1">
+                <input type="checkbox"
+                  id="srv_telefonia"
+                  style="margin-left: 3px;"
+                  [checked]="srv_telefonia"
+                  (change)="validaFormulario($event)">
+              </div>
+              <div class="col-xl-1">
+                <label> Telefonía </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-xl-1">
+                <input type="checkbox"
+                  id="srv_television"
+                  style="margin-left: 3px;"
+                  [checked]="srv_television"
+                  (change)="validaFormulario($event)">
+              </div>
+              <div class="col-xl-1">
+                <label> Televisión </label>
+              </div>
+            </div>
+            <div class="row">
+                <label><span style="color: red">*Al menos un servicio debe ser seleccionado</span></label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" >
+        <div id="problemas"  style="height: 300px;">
+          <div class="row">
+            <h5>Problemas de la afectación</h5>
+          </div>
+          <div class="row">
+            <div class="col-xl-1.5">
+              <label> Atribuible: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+            </div>
+            <div class="col-xl-5">
+              <select
+                class="form-control"
+                name="atribuible"
+                formControlName="atribuible"
+              >
+                <option
+                  [value]="atribuible.descripcion"
+                  *ngFor="let atribuible of atribuibles"
+                >
+                  {{ atribuible.descripcion  }}
+                </option>
+              </select>
+            </div>
+            <div class="col-xl-1.5">
+              <label>
+                Tipo de Problema: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label
+              >
+            </div>
+            <div class="col-xl-4">
+              <select
+                class="form-control"
+                name="tipoProblema"
+                formControlName="tipoProblema"
+              >
+                <option
+                  [value]="tipo.descripcion"
+                  *ngFor="let tipo of tiposProblemas"
+                >
+                  {{ tipo.descripcion  }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xl-1.5">
+              <label> Detalle: <span style="color: red" *ngIf="data.modo != 'Editar'">*</span></label>
+            </div>
+            <div class="col-xl-5">
+              <select
+                class="form-control"
+                name="detalle"
+                formControlName="detalle"
+                style="margin-left: 20px;"
+              >
+                <option
+                  [value]="detalle.descripcion"
+                  *ngFor="let detalle of detalles"
+                >
+                  {{ detalle.descripcion  }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group col-12 mt-3">
+        <div class="row">
+          <div class="col-xl-6" *ngIf="data.modo != 'Editar'">
+            <button
+              type="submit"
+              class="btn btn-block btn-primary"
+              [disabled]="formulario.invalid||!srv_activado"
+            >
+              Generar Alarma
+            </button>
+          </div>
+          <div class="col-xl-6" *ngIf="data.modo == 'Editar'">
+            <button
+              type="submit"
+              class="btn btn-block btn-primary"
+              [disabled]="formulario.invalid"
+              [mat-dialog-close]="true" (click)="submit()"
+            >
+              Modificar Alarma
+            </button>
+          </div>
+          <div class="col-6">
+            <button
+              type="button"
+              class="btn btn-block btn-danger"
+              (click)="onReiniciarFormulario()"
+              [disabled]="formulario.untouched"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

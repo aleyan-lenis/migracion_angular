@@ -1,0 +1,33 @@
+
+.dato-tecnico select{
+	font-size: .9rem;
+	outline: none !important;
+}
+
+.dato-tecnico option{
+	outline: none !important
+}
+
+.contenedor-tipo-logica{
+	font-size: .9rem;	
+	border-left: 1px solid #ccc;
+	display: table;
+}
+
+.contenedor-tipo-logica .titulo{
+	font-weight: 600;
+}
+
+.contenedor-tipo-logica .form-group{
+	margin-bottom: 0;
+	display: table-row;
+}
+
+.contenedor-tipo-logica .form-group label,
+.contenedor-tipo-logica .form-group input{
+	display: table-cell;
+}
+
+.contenedor-tipo-logica .form-group label{
+	width:60%;
+}

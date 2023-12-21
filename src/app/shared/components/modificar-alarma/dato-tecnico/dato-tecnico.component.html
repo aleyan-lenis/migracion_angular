@@ -1,0 +1,196 @@
+<strong>Datos Tecnico</strong>
+<br>
+<ng-template [ngIf]="estadoAlarma == 'P' && !isDisabled ">
+	<div class="row dato-tecnico mt-2" [formGroup]="form">
+		<div class="col-7">
+			<div class="row">
+				<div class="col-12 form-group">
+					<select name="tipoServicio" id="" [attr.disabled]="isDisabled ? '' : null" class="form-control" (change)="onChangeServicio($event)"
+						formControlName="tipoServicio">
+						<option value="0">Tipo de servicio</option>
+						<option [value]="servicio" *ngFor="let servicio of tiposServicios">{{ servicio }}</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row" *ngIf="parametro == 'OTROS'">
+				<div class="col-12 form-group">
+					<input type="text" class="form-control form-control-sm" placeholder="URL del servicio"
+						formControlName="endpoint">
+				</div>
+			</div>
+
+			<div class="row" *ngIf="parametro != 'OTROS' && form.controls.tipoServicio.value == 'SRE' ">
+				<div class="form-group col-12" *ngIf="parametro != 'OTROS'">
+					<select name="dbServicio" id="" class="form-control" formControlName="dbServicio">
+						<option value="0">Base de datos</option>
+						<option [value]="db" *ngFor="let db of dbServicio">{{ db }}</option>
+					</select>
+				</div>
+			</div>
+
+
+			<div class="row form-group" *ngIf="isSRE">
+				<div class="col-4 form-group">
+					<input type="text" formControlName="instancia" placeholder="ID Instancia" class="form-control form-control-sm">
+				</div>
+				<div class="col-4 form-group">
+					<input type="text" formControlName="distribuidor" placeholder="Cod. Alterno Distribuidor" class="form-control form-control-sm">
+				</div>
+				<div class="col-4 form-group">
+					<input type="text" formControlName="integrador" class="form-control form-control-sm" placeholder="ID Integrador">
+				</div>
+			</div>
+
+			<input type="text" *ngIf="parametro != 'OTROS' && form.controls.tipoServicio.value == 'SRE'" formControlName="idServicio"
+				class="form-control form-control-sm" placeholder="ID Servicio">
+
+		</div>
+
+		<div class="col-5 contenedor-tipo-logica" *ngIf="parametro != 'OTROS' && form.controls.tipoServicio.value == 'SRE'">
+			<p class="titulo">Tipo de Logica</p>
+			<div class="form-group">
+				<label for="IYS">Identificacion y Subscripciones</label>
+				<input type="radio" name="tipoLogica" id="IYS" value="IYS" formControlName="tipoLogica">
+			</div>
+			<div class="form-group">
+				<label for="SPI">Solo por identificacion</label>
+				<input type="radio" name="tipoLogica" id="SPI" value="SPI" formControlName="tipoLogica">
+			</div>
+			<div class="form-group">
+				<label for="SPS">Solo por subscripciones</label>
+				<input type="radio" name="tipoLogica" id="SPS" value="SPS" formControlName="tipoLogica">
+			</div>
+
+			<hr>
+
+			<div class="form-group">
+				<label for="info-adicional" style="font-weight: 600">Informacion adicional</label>
+				<input type="checkbox" name="informacion-adicional" id="info-adicional"
+					formControlName="informacionAdicional">
+			</div>
+		</div>
+	</div>
+</ng-template>
+
+<ng-template [ngIf]="estadoAlarma == 'P' && isDisabled">
+	<div>
+		<div class="col-12 form-group" *ngIf="form.value.tipoServicio == '0'">
+			<tbody>
+				<td colspan="5" class="text-center" style="color:rgb(235, 31, 31); font-weight: 400;">Por favor, edite la alarma e ingreso los datos técnicos</td>
+			</tbody>
+		</div>
+
+		<div class="row mt-2" *ngIf="form.value.tipoServicio != '0'" >
+			<div class="col-6" style="font-size: .9rem">
+				<span style="display: block" *ngIf="datosTecnicos?.endpoint != null">
+					<span style="font-weight: 600">URL: </span>
+					<span>{{ datosTecnicos?.endpoint }}</span>
+				</span>
+	
+				<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+					<span style="font-weight: 600">ID Servicio: </span>
+					<span>{{ datosTecnicos?.idServicio }}</span>
+				</span>
+	
+				<span style="display: block">
+					<span style="font-weight: 600">Tipo Servicio: </span>
+					<span>{{ datosTecnicos?.tipoServicio }}</span>
+				</span>
+	
+				<span style="display: block" *ngIf="datosTecnicos?.dbServicio != null">
+					<span style="font-weight: 600">Base de datos: </span>
+					<span>{{ datosTecnicos?.dbServicio }}</span>
+				</span>
+	
+				<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+					<span style="font-weight: 600">Tipo logica: </span>
+					<span>{{ datosTecnicos?.tipoLogica | tipoLogica}}</span>
+				</span>
+	
+				<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+					<span style="font-weight: 600">Informacion adicional: </span>
+					<span>{{ datosTecnicos?.informacionAdicional ? 'SI' : 'NO'}}</span>
+				</span>
+	
+	
+			</div>
+	
+			<div class="col-6" style="font-size: .9rem">
+				<ng-template [ngIf]="datosTecnicos?.tipoServicio == 'SRE'">
+					<span style="display: block">
+						<span style="font-weight: 600">Integrador: </span>
+						<span>{{ datosTecnicos?.integrador }}</span>
+					</span>
+					<span style="display: block">
+						<span style="font-weight: 600">Instancia: </span>
+						<span>{{ datosTecnicos?.instancia }}</span>
+					</span>
+					<span style="display: block">
+						<span style="font-weight: 600">Distribuidor: </span>
+						<span>{{ datosTecnicos?.distribuidor }}</span>
+					</span>
+				</ng-template>
+	
+			</div>
+		</div>
+
+	</div>
+
+</ng-template>
+
+<ng-template [ngIf]="estadoAlarma != 'P'">
+	<div class="row mt-2">
+		<div class="col-6" style="font-size: .9rem">
+			<span style="display: block" *ngIf="datosTecnicos?.endpoint != null">
+				<span style="font-weight: 600">URL: </span>
+				<span>{{ datosTecnicos?.endpoint }}</span>
+			</span>
+
+			<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+				<span style="font-weight: 600">ID Servicio: </span>
+				<span>{{ datosTecnicos?.idServicio }}</span>
+			</span>
+
+			<span style="display: block">
+				<span style="font-weight: 600">Tipo Servicio: </span>
+				<span>{{ datosTecnicos?.tipoServicio }}</span>
+			</span>
+
+			<span style="display: block" *ngIf="datosTecnicos?.dbServicio != null">
+				<span style="font-weight: 600">Base de datos: </span>
+				<span>{{ datosTecnicos?.dbServicio }}</span>
+			</span>
+
+			<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+				<span style="font-weight: 600">Tipo logica: </span>
+				<span>{{ datosTecnicos?.tipoLogica | tipoLogica}}</span>
+			</span>
+
+			<span style="display: block" *ngIf="datosTecnicos?.tipoServicio != 'OTROS'">
+				<span style="font-weight: 600">Informacion adicional: </span>
+				<span>{{ datosTecnicos?.informacionAdicional ? 'SI' : 'NO'}}</span>
+			</span>
+
+
+		</div>
+
+		<div class="col-6" style="font-size: .9rem">
+			<ng-template [ngIf]="datosTecnicos?.tipoServicio == 'SRE'">
+				<span style="display: block">
+					<span style="font-weight: 600">Integrador: </span>
+					<span>{{ datosTecnicos?.integrador }}</span>
+				</span>
+				<span style="display: block">
+					<span style="font-weight: 600">Instancia: </span>
+					<span>{{ datosTecnicos?.instancia }}</span>
+				</span>
+				<span style="display: block">
+					<span style="font-weight: 600">Distribuidor: </span>
+					<span>{{ datosTecnicos?.distribuidor }}</span>
+				</span>
+			</ng-template>
+
+		</div>
+	</div>
+</ng-template>

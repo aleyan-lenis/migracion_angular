@@ -1,0 +1,6 @@
+<label for="switch" class="opcion" [ngClass]="{'active': actualOption == firstOption}"> {{ firstOption }} </label>
+<label class="switch">
+	<input id="switch" type="checkbox" (click)="cambiarOpcion()">
+	<span class="slider round"></span>
+</label>
+<label for="switch" class="opcion" [ngClass]="{'active': actualOption == secondOption}"> {{ secondOption }} </label>

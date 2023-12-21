@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ data.modo == 'creacion'  ? 'Crear Nuevo Atribuible' : 'Modificar Nombre' }}</h2>
+<div class="container">
+  <mat-dialog-content class="mat-typography">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group" *ngIf="data.modo == 'creacion'">
+          <label>Nombre:</label>
+          <input type="text" placeholder="Ingresar nombre..." class="input-with-underline"
+          style="width: 100%;padding-right: 25px;font-size: 1.2rem" (keyup)="onBuscarAtribuible($event)" >
+        </div>
+
+        <div class="form-group" *ngIf="data.modo == 'modificacion'">
+          <label>Cambiar nombre:</label>
+          <input type="text" placeholder="{{data.atribuible.descripcion | titlecase}}..." class="input-with-underline"
+          style="width: 100%;padding-right: 25px;font-size: 1.2rem" (keyup)="onBuscarAtribuible($event)">
+        </div>
+
+        <div class="form-group" *ngIf="isSearch && atribuibles.length != 0">
+          <ul class="containers-user">
+            <li *ngFor="let atribuible of atribuibles">
+              {{ atribuible.descripcion | titlecase}}</li>
+          </ul>
+          <span class="text-danger" style="display: block; font-size: .9rem" *ngIf=" data.modo == 'creacion' && (isSearch && atribuibles.length != 0) "> Ingrese otra descripción. </span>
+          <span class="text-danger" style="display: block; font-size: .9rem" *ngIf=" data.modo == 'modificacion' && (nombreAtribuible == data.atribuible.descripcion) "> Ingrese otra descripción. </span>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true" (click)="crearNuevoAtribuible() "
+      *ngIf="data.modo == 'creacion'" [disabled]="atribuibles.length != 0 || nombreAtribuible == ''">Registrar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial (click)=" modificarNombreAtribuible(data.atribuible.id_catalogo) "
+      *ngIf="data.modo == 'modificacion'" [disabled]=" nombreAtribuible == data.atribuible.descripcion ">Modificar</button>
+  </mat-dialog-actions>

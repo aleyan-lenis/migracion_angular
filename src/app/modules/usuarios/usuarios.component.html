@@ -1,0 +1,68 @@
+<div class="row mt-2 px-2">
+  <div class="col-12">
+    <div style="display: flex; align-items: center">
+      <p style="font-size: 1.3rem; font-weight: 500">Gestion de usuarios</p>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="row justify-content-between align-items-center">
+      <div class="col-6">
+        <mat-form-field [color]="'warn'">
+          <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filtrar" type="text">
+        </mat-form-field>
+      </div>
+      
+      <div class="col-auto">
+          <button mat-raised-button color="warn" (click)="openDialog()">Nuevo usuario</button>
+      </div>
+    </div>
+
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8">
+      
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.nombre | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="nombre_departamento">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Area </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.nombre_departamento | titlecase}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="rol">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Rol </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.rol | roles}} </td>
+      </ng-container>
+      
+      <ng-container matColumnDef="estado">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Estado </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.estado | estadoCompleto}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaDesde">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Desde </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.fechaDesde | date}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="fechaActualizacion">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Ult. Actualizacion </th>
+        <td mat-cell *matCellDef="let usuario"> {{usuario.fechaActualizacion | date}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> Opciones </th>
+          <td mat-cell *matCellDef="let usuario">
+              <button mat-button (click)="modificarPermisos(usuario.position)" *ngIf="usuario.rol != 'ALM_ADM' && usuario.estado == 'A' ">Modificar</button>
+              <button mat-button color="warn" (click)="inactivarUsuario(usuario.position)" *ngIf="usuario.rol != 'ALM_ADM' && usuario.estado == 'A' ">Inactivar</button>
+              <button mat-button (click)="activarUsuario(usuario.position)" *ngIf="usuario.rol != 'ALM_ADM' && usuario.estado == 'I' ">Activar</button>
+          </td>
+        </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[5, 10, 25]" [color]="'warn'" showFirstLastButtons></mat-paginator>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+@import '../../../../assets/sass/variables.scss';
+
+.btn-principal:disabled{
+	background: $color-primario-disable;
+	border: $color-primario-disable;
+}
+
+.btn-principal{
+	background: $color-primario;
+	border: $color-primario;
+	color: #ffffff;
+}
+
+.enlace-opcion{
+	cursor: pointer;
+	text-decoration: underline !important;
+	font-size: .9rem;
+}
+
+.contenedor-solicitantes{
+	width: 100%;
+	position: relative;
+}
+
+.containers-user{
+	list-style: none;
+	overflow-y: scroll;
+	max-height: 300px;
+	width: 100%;
+	padding: 0 !important;
+	z-index: 100 !important;
+}
+
+.containers-user li{
+	padding: 8px 10px;
+	border-bottom: 1px solid rgba(0,0,0,.12);
+	cursor: pointer;
+	color: rgb(75, 75, 75);
+	background: #fff;
+	z-index: inherit;
+}
+
+.containers-user li:hover{
+	background: rgb(223, 223, 223);
+}
+
+.row{
+	padding: 8px 10px;
+}
+
+h3,h5{
+  padding: 15px;
+  background-color: red;
+  color: white;
+  width: 100%;
+}
+
+mat-divider{
+  padding: 8px 10px;
+}
+
+#tiempo,#datos-tecnicos,#problemas,#servicios{
+  padding: 10px;
+  margin: 10px;
+	border: 1px solid rgba(0,0,0,.12);
+  width: 100%;
+}
+
+#all-content{
+  font-size: 1.0rem;
+}

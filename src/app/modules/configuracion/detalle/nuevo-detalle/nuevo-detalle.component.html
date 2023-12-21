@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ data.modo == 'creacion'  ? 'Crear Nuevo Detalle' : 'Modificar Nombre' }}</h2>
+<div class="container">
+  <mat-dialog-content class="mat-typography">
+    <div class="row">
+      <div class="col-12">
+        <div class="form-group" *ngIf="data.modo == 'creacion'">
+          <label>Nombre:</label>
+          <input type="text" placeholder="Ingresar nombre..." class="input-with-underline"
+          style="width: 100%;padding-right: 25px;font-size: 1.2rem" (keyup)="onBuscarDetalle($event)" >
+        </div>
+
+        <div class="form-group" *ngIf="data.modo == 'modificacion'">
+          <label>Cambiar nombre:</label>
+          <input type="text" placeholder="{{data.detalle.descripcion | titlecase}}..." class="input-with-underline"
+          style="width: 100%;padding-right: 25px;font-size: 1.2rem" (keyup)="onBuscarDetalle($event)">
+        </div>
+
+        <div class="form-group" *ngIf="isSearch && detalles.length != 0">
+          <ul class="containers-user">
+            <li *ngFor="let detalle of detalles">
+              {{ detalle.descripcion | titlecase}}</li>
+          </ul>
+          <span class="text-danger" style="display: block; font-size: .9rem" *ngIf=" data.modo == 'creacion' && (isSearch && detalles.length != 0) "> Ingrese otra descripción. </span>
+          <span class="text-danger" style="display: block; font-size: .9rem" *ngIf=" data.modo == 'modificacion' && (nombreDetalle == data.detalle.descripcion) "> Ingrese otra descripción. </span>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Cancelar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true" (click)="crearNuevoDetalle() "
+      *ngIf="data.modo == 'creacion'" [disabled]="detalles.length != 0 || nombreDetalle == ''">Registrar</button>
+    <button mat-raised-button color="warn" [mat-dialog-close]="true" cdkFocusInitial (click)=" modificarNombreDetalle(data.detalle.id_catalogo) "
+      *ngIf="data.modo == 'modificacion'" [disabled]=" nombreDetalle == data.detalle.descripcion ">Modificar</button>
+  </mat-dialog-actions>

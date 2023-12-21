@@ -1,0 +1,18 @@
+.observacion{
+	width: 100%;
+	display: flex;
+	border: 1px solid;
+	border-radius: 5px;
+	padding: 8px 15px;
+	background: #fff;
+	justify-content: space-between;
+	margin-bottom: 10px;
+}
+
+.red-border{
+	border-color: #fd000d;
+}
+
+.green-border{
+	border-color: #6ac259;
+}

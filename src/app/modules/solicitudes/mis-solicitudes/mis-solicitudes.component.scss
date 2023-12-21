@@ -1,0 +1,51 @@
+.contenedor-alarmas{
+	width: 100%;
+	height: auto;
+}
+
+
+.alarma__nombre{
+	font-weight: 500;
+}
+
+
+.contenedor-scroll{
+	max-height: 400px;
+	overflow-y: scroll;
+}
+
+.wrapper-estado-alarmas{
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	
+}
+
+.active-estado-alarma{
+	color: #202020 !important;
+	border-bottom: 2px solid red;
+}
+
+.alarma{
+	box-sizing: border-box;
+	width: 98%;
+	margin: 0px auto ;
+	padding: 8px 10px;
+	border-bottom: 1px solid #e4e4e4;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.alarma:hover{
+	background: #eeeeee;
+}
+
+.alarma:last-child{
+	border: none;
+}
+
+.alarma__fechas{
+	display: flex;
+	flex-direction: column;
+}

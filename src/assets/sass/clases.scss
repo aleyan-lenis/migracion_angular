@@ -1,0 +1,22 @@
+@import 'variables.scss';
+
+.link-secundario{
+   color: #2c2c2c;
+   text-decoration: underline !important; 
+   cursor: pointer;
+}
+
+.btn-principal:disabled{
+   background: $color-primario-disable;
+   border: $color-primario-disable;
+}
+
+.btn-principal{
+   background: $color-primario;
+   border: $color-primario;
+   color: #ffffff;
+}
+
+.btn-principal:focus{
+   box-shadow: 0 0 4px $color-primario;
+}

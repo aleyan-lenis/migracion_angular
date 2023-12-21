@@ -1,0 +1,26 @@
+table{
+    font-size: .9rem;
+    width: 100%
+}
+
+.mat-header-row{
+    background: #FD000D ;
+    height: 40px;
+}
+
+button.mat-sort-header-button{
+    color: #fff !important;
+}
+
+.mat-row{
+    height: 40px;
+}
+
+.mat-row:hover{
+    background: rgb(224, 224, 224);
+}
+
+th{
+    color: #fff;
+    font-weight: bold;
+}
